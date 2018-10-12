@@ -45,7 +45,7 @@
             client.MessageReceived += Client_MessageReceivedAsync;
             client.Ready += Client_ReadyAsync;
         }
-        
+
         /// <summary>
         /// Initializes all bot modules
         /// </summary>
@@ -95,7 +95,7 @@
             var argPos = 0;
 
             // Ensure that we filter out all messages that do not start with the bot prefix
-            if (!(message.HasMentionPrefix(client.CurrentUser, ref argPos) || message.HasStringPrefix(".", ref argPos)))
+            if (!(message.HasMentionPrefix(client.CurrentUser, ref argPos) || message.HasStringPrefix("!", ref argPos)))
             {
                 return;
             }

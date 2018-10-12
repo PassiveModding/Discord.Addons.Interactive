@@ -65,7 +65,6 @@ namespace SampleBot
                             Name = "Field 1",
                             Value = "Field 1 Description"
                         }
-
                     },
                     ImageUrl = "https://discordapp.com/assets/9c38ca7c8efaed0c58149217515ea19f.png",
                     Color = Color.DarkMagenta,
@@ -128,7 +127,6 @@ namespace SampleBot
                 TimeStamp = DateTimeOffset.UtcNow
             };
 
-
             await PagedReplyAsync(pager, new ReactionList
             {
                 Forward = true,
@@ -145,11 +143,16 @@ namespace SampleBot
         [Command("reaction")]
         public async Task Test_ReactionReply()
         {
-            await InlineReactionReplyAsync(new ReactionCallbackData("text", null, false, false)
+            //This message does not expire after a single
+            //it will not allow a user to react more than once
+            //it allows more than one user to react
+            //it will expire after 60 seconds
+            await InlineReactionReplyAsync(new ReactionCallbackData("text", null, false, true, TimeSpan.FromSeconds(60), c => c.Channel.SendMessageAsync("Timed Out!"))
                 .WithCallback(new Emoji("👍"), (c, r) => c.Channel.SendMessageAsync($"{r.User.Value.Mention} replied with 👍"))
                 .WithCallback(new Emoji("👎"), (c, r) => c.Channel.SendMessageAsync($"{r.User.Value.Mention} replied with 👎"))
-            );
+            , false);
         }
+
         [Command("embedreaction")]
         public async Task Test_EmedReactionReply(bool expiresafteruse, bool singleuseperuser, bool sourceuser)
         {
@@ -162,11 +165,8 @@ namespace SampleBot
                 .AddField(two.Name, "Drink", true)
                 .Build();
 
-            //This message does not expire after a single
-            //it will not allow a user to react more than once
-            //it allows more than one user to react
-            await InlineReactionReplyAsync(new ReactionCallbackData("text", embed, expiresafteruse, singleuseperuser, TimeSpan.FromSeconds(20), (c) =>  c.Channel.SendMessageAsync("Timed Out!"))
-                .WithCallback(one, (c, r) => c.Channel.SendMessageAsync($"{r.User.Value.Mention} Here you go :beer:") )
+            await InlineReactionReplyAsync(new ReactionCallbackData("text", embed, expiresafteruse, singleuseperuser, TimeSpan.FromSeconds(20), (c) => c.Channel.SendMessageAsync("Timed Out!"))
+                .WithCallback(one, (c, r) => c.Channel.SendMessageAsync($"{r.User.Value.Mention} Here you go :beer:"))
                 .WithCallback(two, (c, r) => c.Channel.SendMessageAsync($"{r.User.Value.Mention} Here you go :tropical_drink:")), sourceuser
             );
         }

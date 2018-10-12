@@ -121,16 +121,28 @@
             var reactionCallbackItem = data.Callbacks.FirstOrDefault(t => t.Reaction.Equals(reaction.Emote));
             if (reactionCallbackItem == null)
             {
+                //remove all extra reactions from the user
+                if (reaction.User.IsSpecified)
+                    await Message.RemoveReactionAsync(reaction.Emote, reaction.User.Value);
                 return false;
             }
 
             if (data.SingleUsePerUser)
             {
                 // Ensure that we only allow users to react a single time.
-                if (!data.ReactorIDs.Contains(reaction.UserId))
+                if (!data.ReactorIDs.ContainsKey(reaction.UserId))
                 {
                     await reactionCallbackItem.Callback(Context, reaction);
-                    data.ReactorIDs.Add(reaction.UserId);
+                    data.ReactorIDs.TryAdd(reaction.UserId, reaction.Emote);
+                }
+                else
+                {
+                    if (reaction.User.IsSpecified && data.ReactorIDs.TryGetValue(reaction.UserId, out var emote))
+                    {
+                        //remove all further reactions apart from the user's first reaction
+                        if (!reaction.Emote.Equals(emote))
+                            await Message.RemoveReactionAsync(reaction.Emote, reaction.User.Value);
+                    }
                 }
             }
             else

@@ -3,6 +3,7 @@
 namespace Discord.Addons.Interactive
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace Discord.Addons.Interactive
 
             SingleUsePerUser = singleUsePerUser;
             ExpiresAfterUse = expiresAfterUse;
-            ReactorIDs = new List<ulong>();
+            ReactorIDs = new ConcurrentDictionary<ulong, IEmote>();
             Text = text ?? "";
             Embed = embed;
             Timeout = timeout;
@@ -33,7 +34,10 @@ namespace Discord.Addons.Interactive
         public IEnumerable<ReactionCallbackItem> Callbacks => items;
         public bool ExpiresAfterUse { get; }
         public bool SingleUsePerUser { get; }
-        public List<ulong> ReactorIDs { get; }
+
+        //userId - first reacted Emote
+        public ConcurrentDictionary<ulong, IEmote> ReactorIDs { get; }
+
         public string Text { get; }
         public Embed Embed { get; }
         public TimeSpan? Timeout { get; }

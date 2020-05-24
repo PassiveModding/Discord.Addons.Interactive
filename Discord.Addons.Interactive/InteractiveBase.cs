@@ -1,4 +1,6 @@
-﻿namespace Discord.Addons.Interactive
+﻿using Discord.Addons.Interactive.Results;
+
+namespace Discord.Addons.Interactive
 {
     using System;
     using System.Threading.Tasks;

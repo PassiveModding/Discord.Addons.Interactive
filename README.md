@@ -1,3 +1,6 @@
+**NOTE: This fork has been deprecated. I will no longer be updating this fork.**
+
+
 # Interactive
 
 An addon for [Discord.Net](https://github.com/RogueException/Discord.Net) that adds interactivity to your commands.

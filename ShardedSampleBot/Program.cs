@@ -1,16 +1,14 @@
-﻿namespace SampleBot
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Addons.Interactive;
+using Discord.Commands;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace ShardedSampleBot
 {
-    using System;
-    using System.IO;
-    using System.Threading.Tasks;
-
-    using Discord;
-    using Discord.Addons.Interactive;
-    using Discord.Commands;
-    using Discord.WebSocket;
-
-    using Microsoft.Extensions.DependencyInjection;
-
     /// <summary>
     /// The program.
     /// </summary>
